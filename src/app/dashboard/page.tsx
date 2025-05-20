@@ -3,12 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { bookings, services, users } from '@/mockData';
-import {
-  CalendarIcon,
-  MapPinIcon,
-  ClockIcon,
-  UserIcon
-} from '@heroicons/react/24/outline';
+import { CalendarIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function DashboardPage() {

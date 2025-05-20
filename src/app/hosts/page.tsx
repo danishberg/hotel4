@@ -23,7 +23,7 @@ export default function HostsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Our Hosts</h1>
           <select
             value={sortBy}
-            onChange={e => setSortBy(e.target.value as any)}
+            onChange={e => setSortBy(e.target.value as 'rating' | '')}
             className="rounded-md border-gray-300 py-2 pl-3 pr-10 focus:border-indigo-500 focus:ring-indigo-500"
           >
             <option value="rating">Sort by Rating</option>

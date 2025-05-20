@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect } from 'react';
 import {
   MapContainer,
@@ -9,50 +10,35 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import L from 'leaflet';
+import type { Service } from '@/mockData';
+import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+// ── fix default icon urls ─────────────────────────────────────────────────────
+// define the small interface we need
+interface IconDefaultPrototype {
+  _getIconUrl?: string;
+}
+
+// cast to that instead of `any`
+delete (L.Icon.Default.prototype as IconDefaultPrototype)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: '/img/marker-icon-2x.png',
-  iconUrl: '/img/marker-icon.png',
-  shadowUrl: '/img/marker-shadow.png',
+  iconRetinaUrl: '/marker-icon-2x.png',
+  iconUrl:       '/marker-icon.png',
+  shadowUrl:     '/marker-shadow.png',
 });
 
-interface Service {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  duration: string;
-  imageUrl: string;
-  hostName: string;
-  rating: number;
-  location: string;
-  lat: number;
-  lng: number;
-  hostId: number;
-  maxGuests: number;
-}
-
-interface Props {
-  services: Service[];
-  selected: Service | null;
-  onSelect: (s: Service) => void;
-  onBook: (s: Service) => void;
-}
-
-function InvalidateMap() {
+// ── force the map to recalc its size whenever the container mounts ────────────
+function ResizeMap() {
   const map = useMap();
   useEffect(() => {
     map.invalidateSize();
-    const onResize = () => map.invalidateSize();
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
   }, [map]);
   return null;
 }
 
+// ── fly the map to a new position on demand ───────────────────────────────────
 function FlyToMarker({ position }: { position: [number, number] }) {
   const map = useMap();
   useEffect(() => {
@@ -61,17 +47,25 @@ function FlyToMarker({ position }: { position: [number, number] }) {
   return null;
 }
 
+// ── listen for global "flyTo" events ─────────────────────────────────────────
 function FlyToListener() {
   const map = useMap();
   useEffect(() => {
-    const h = (e: any) => {
-      const [lat, lng] = e.detail as [number, number];
-      map.flyTo([lat, lng], 12, { duration: 1 });
+    const handler = (e: CustomEvent<[number, number]>) => {
+      map.flyTo(e.detail, 12, { duration: 1 });
     };
-    window.addEventListener('flyTo', h);
-    return () => window.removeEventListener('flyTo', h);
+    window.addEventListener('flyTo', handler as EventListener);
+    return () => window.removeEventListener('flyTo', handler as EventListener);
   }, [map]);
   return null;
+}
+
+// ── main component ────────────────────────────────────────────────────────────
+interface Props {
+  services: Service[];
+  selected: Service | null;
+  onSelect: (svc: Service) => void;
+  onBook: (svc: Service) => void;
 }
 
 export default function MapWithSidebar({
@@ -80,6 +74,7 @@ export default function MapWithSidebar({
   onSelect,
   onBook,
 }: Props) {
+  // default center over Kazakhstan
   const center: [number, number] = [48.0196, 66.9237];
 
   return (
@@ -87,9 +82,9 @@ export default function MapWithSidebar({
       center={center}
       zoom={5}
       scrollWheelZoom
-      style={{ width: '100%', height: '100%' }}
+      className="h-full w-full"
     >
-      <InvalidateMap />
+      <ResizeMap />
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       <MarkerClusterGroup chunkedLoading>
@@ -128,4 +123,4 @@ export default function MapWithSidebar({
       <FlyToListener />
     </MapContainer>
   );
-} 
+}

@@ -31,6 +31,8 @@ interface Service {
   location: string;
   lat: number;
   lng: number;
+  hostId: number;
+  maxGuests: number;
 }
 
 interface Props {

@@ -3,6 +3,22 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import ExperienceCard from '@/components/ExperienceCard';
 
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  duration: string;
+  imageUrl: string;
+  hostName: string;
+  rating: number;
+  location: string;
+  lat: number;
+  lng: number;
+  hostId: number;
+  maxGuests: number;
+}
+
 const MapWithSidebar = dynamic(() => import('@/components/MapWithSidebar'), {
   ssr: false,
   loading: () => (
@@ -24,7 +40,9 @@ const sampleExperiences = [
     rating: 4.9,
     location: "Almaty, Kazakhstan",
     lat: 43.2220,
-    lng: 76.8512
+    lng: 76.8512,
+    hostId: 1,
+    maxGuests: 6
   },
   {
     id: 2,
@@ -37,7 +55,9 @@ const sampleExperiences = [
     rating: 4.8,
     location: "Astana, Kazakhstan",
     lat: 51.1694,
-    lng: 71.4491
+    lng: 71.4491,
+    hostId: 2,
+    maxGuests: 4
   },
   {
     id: 3,
@@ -50,14 +70,16 @@ const sampleExperiences = [
     rating: 4.7,
     location: "Shymkent, Kazakhstan",
     lat: 42.3000,
-    lng: 69.6000
+    lng: 69.6000,
+    hostId: 3,
+    maxGuests: 8
   }
 ];
 
 export default function MapPage() {
-  const [selectedExperience, setSelectedExperience] = useState<typeof sampleExperiences[0] | null>(null);
+  const [selectedExperience, setSelectedExperience] = useState<Service | null>(null);
 
-  const handleBook = (experience: typeof sampleExperiences[0]) => {
+  const handleBook = (experience: Service) => {
     // Handle booking logic here
     console.log('Booking experience:', experience);
   };
@@ -89,7 +111,7 @@ export default function MapPage() {
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Selected Experience</h2>
               {selectedExperience ? (
-                <ExperienceCard {...selectedExperience} />
+                <ExperienceCard service={selectedExperience} />
               ) : (
                 <p className="text-gray-500">Select an experience on the map to view details</p>
               )}

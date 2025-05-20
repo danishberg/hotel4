@@ -1,48 +1,68 @@
-const experiences = [
+import ExperienceCard from '@/components/ExperienceCard';
+
+const sampleExperiences = [
   {
-    name: "Aigerim",
-    title: "Traditional Kazakh Dinner",
-    description: "Enjoy a cozy dinner with beshbarmak, baursaks, and tea in a real Kazakh home.",
-    price: 8000,
+    title: "Traditional Kazakh Cooking Class",
+    description: "Learn to cook authentic Kazakh dishes with a local chef in their home kitchen.",
+    price: 45,
+    duration: "3 hours",
+    imageUrl: "/experiences/cooking.jpg",
+    hostName: "Amina Kenzhebekova",
     rating: 4.9,
-    photo: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=400&h=400&q=80",
+    location: "Almaty, Kazakhstan"
   },
   {
-    name: "Nursultan",
-    title: "City Walking Tour",
-    description: "Discover hidden gems of Almaty with a local guide.",
-    price: 5000,
+    title: "City Photography Tour",
+    description: "Capture the beauty of Astana's modern architecture with a professional photographer.",
+    price: 60,
+    duration: "4 hours",
+    imageUrl: "/experiences/photography.jpg",
+    hostName: "Dmitri Petrov",
     rating: 4.8,
-    photo: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=facearea&w=400&h=400&q=80",
+    location: "Astana, Kazakhstan"
   },
   {
-    name: "Saltanat",
-    title: "Cooking Masterclass",
-    description: "Learn to cook plov and shashlik in a friendly kitchen.",
-    price: 7000,
-    rating: 5.0,
-    photo: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=facearea&w=400&h=400&q=80",
-  },
+    title: "Traditional Craft Workshop",
+    description: "Create your own Kazakh traditional crafts under the guidance of a master artisan.",
+    price: 35,
+    duration: "2 hours",
+    imageUrl: "/experiences/crafts.jpg",
+    hostName: "Zarina Alimova",
+    rating: 4.7,
+    location: "Shymkent, Kazakhstan"
+  }
 ];
 
-export default function Browse() {
+export default function BrowsePage() {
   return (
-    <div className="max-w-5xl mx-auto py-12 px-4">
-      <h2 className="text-3xl font-bold text-amber-700 mb-8 text-center">Browse Experiences</h2>
-      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-        {experiences.map((exp, i) => (
-          <div key={i} className="bg-white/80 rounded-lg shadow p-4 flex flex-col items-center">
-            <img src={exp.photo} alt={exp.title} className="w-32 h-32 object-cover rounded-full mb-4 border-4 border-amber-100" />
-            <h3 className="text-xl font-semibold text-amber-800 mb-1">{exp.title}</h3>
-            <div className="text-amber-600 font-medium mb-2">by {exp.name}</div>
-            <p className="text-amber-900 text-sm mb-2">{exp.description}</p>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-amber-700 font-bold">{exp.price} ₸</span>
-              <span className="text-yellow-400">★ {exp.rating}</span>
-            </div>
-            <button className="bg-amber-500 hover:bg-orange-400 text-white font-semibold px-4 py-2 rounded-full shadow transition mt-2">Book</button>
-          </div>
-        ))}
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Browse Experiences</h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Discover unique experiences hosted by locals across Kazakhstan.
+            From cooking classes to city tours, find the perfect activity for your visit.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sampleExperiences.map((experience) => (
+            <ExperienceCard key={experience.title} {...experience} />
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Can't find what you're looking for?</h2>
+          <p className="text-gray-600 mb-6">
+            Contact us to request a custom experience tailored to your interests.
+          </p>
+          <a
+            href="/contact"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Request Custom Experience
+          </a>
+        </div>
       </div>
     </div>
   );
